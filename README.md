@@ -80,7 +80,7 @@ MUST be unique (case-insensitive). Any field name MUST be enclosed in double-quo
 
 Example:
 
-```
+```csv
 "first name","last name","age"
 "John","Doe",42
 "Jane","Doe",\N
@@ -92,7 +92,7 @@ A line starting with a hash character (`#`) is considered a comment. The hash ch
 the line. Until the end of line, any character is allowed. The end-of-line character(s) MUST NOT be part of the comment.
 Comments MAY be inserted anywhere in the file, except within a record.
 
-```
+```csv
 # This is a comment
 "header1","header2","header3"
 # This is another comment
@@ -176,14 +176,14 @@ TDIF defines `\N` for null values. This decision was made because other mechanis
 
 In the following example it's not clear if the file contains a null value in the third line.
 
-```
+```csv
 header1CRLF
 value1CRLF
 ```
 
 In TDIF this is unambiguous, no matter if the last line is terminated by a line-feed character or not.
 
-```
+```csv
 "header1"CRLF
 "value1"CRLF
 \N
