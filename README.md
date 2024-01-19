@@ -125,8 +125,8 @@ field           = null / value
 
 value           = DQUOTE *(textdata / escaped-quote / escaped-escaped) DQUOTE
 
-textdata        = %x00-09 / %x0B-0C / %x0E-5B / %x5D-7F / UTF8-data
-                    ; all characters except CR, LF and reverse solidus
+textdata        = %x00-5B / %x5D-7F / UTF8-data
+                    ; all characters except reverse solidus
 
 ;;; comment
 
