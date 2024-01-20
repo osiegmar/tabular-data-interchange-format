@@ -177,14 +177,14 @@ to circumvent the ambiguities of CSV and address some very often used features t
 problems and unexpected results (see [Rationale section](#Rationale)).
 
 - Specify these features (mentioned, but not specified in RFC 4180-bis)
-  - Explicit null values
-  - Comments
+    - Explicit null values
+    - Comments
 - Make the format unambiguous
-  - Specify the file encoding
-  - Make the header record mandatory and its fields unique
-  - Require the same number of fields in each record
-  - Allow only one way to separate fields
-  - Specify the difference between null values and empty fields
+    - Specify the file encoding
+    - Make the header record mandatory and its fields unique
+    - Require the same number of fields in each record
+    - Allow only one way to separate fields
+    - Specify the difference between null values and empty fields
 
 These differences come with a few consequences:
 
@@ -224,7 +224,8 @@ comments are mentioned as a possible extension.
 ### Always enclose fields in double quotation marks
 
 In CSV, fields need to be enclosed in double quotation marks only if they contain control characters such as a field
-separator, a line break or a quotation mark. In TDIF, this list has to be extended by the hash character (`#`) in order to support comments.
+separator, a line break or a quotation mark. In TDIF, this list has to be extended by the hash character (`#`) in order
+to support comments.
 
 Still, there are situations where ambiguity arises. For example:
 
