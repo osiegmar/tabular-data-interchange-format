@@ -85,7 +85,7 @@ Example:
 
 ```csv
 "first name","last name","age"
-"John","Doe",42
+"John","Doe","42"
 "Jane","Doe",\N
 ```
 
