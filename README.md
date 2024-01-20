@@ -198,6 +198,52 @@ provide additional information about the file like the author, the creation date
 The TDIF format specifies comments to make it easier to embed additional information in the file. In RFC 4180-bis,
 comments are mentioned as a possible extension.
 
+### Always enclose fields in double quotation marks
+
+In CSV, fields need to be enclosed in double quotation marks only if they contain control characters such as a field
+separator, a line break or a quotation mark. In TDIF, this list has to be extended by the hash character (`#`) in order to support comments.
+
+Still, there are situations where ambiguity arises. For example:
+
+**Example 1**: Empty field in the last record of a file that contains only one field per record:
+
+In the following example it's not clear if the file contains an empty value in the third line.
+
+```csv
+header1CRLF
+value1CRLF
+```
+
+In TDIF this is unambiguous, no matter if the last line is terminated by a line-feed character or not.
+
+```csv
+"header1"CRLF
+"value1"CRLF
+""
+```
+
+RFC 4180-bis mentions this ambiguity and requires and end-of-line character event after the last field of the last
+record. But which application uses the new and which the old rule?
+
+**Example 2**: Desired whitespaces:
+
+``csv
+header1,_header2CRLF
+_foo,bar_
+``
+
+Underscores are used to represent whitespaces in order to prevent the Markdown editor/renderer from removing them.
+
+Which of the whitespaces are desired and which are not? This is not clear. The following example is unambiguous.
+
+```csv
+"header1"," header2"CRLF
+" foo","bar "
+```
+
+For the sake of simplicity and clarity, TDIF requires that all fields are enclosed in double quotation marks. This makes
+the format unambiguous and easy to read and write.
+
 ## Request for Comments
 
 This document is currently in draft form. Comments and suggestions are welcome. Please start
