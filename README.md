@@ -169,6 +169,26 @@ UTF8-data       = UTF8-2 / UTF8-3 / UTF8-4
 
 ## Considerations
 
+While TDIF aims to be as close to CSV as possible, there are some intentional differences. These differences are made
+to circumvent the ambiguities of CSV and address some very often used features that sometimes lead to interchange
+problems and unexpected results (see [Rationale section](#Rationale)).
+
+- Specify these features (mentioned, but not specified in RFC 4180-bis)
+  - Explicit null values
+  - Comments
+- Make the format unambiguous
+  - Specify the file encoding
+  - Make the header record mandatory and its fields unique
+  - Require the same number of fields in each record
+  - Allow only one way to separate fields
+  - Specify the difference between null values and empty fields
+
+These differences come with a few consequences:
+
+- Empty lines are no longer necessary and thus not allowed
+- Always enclose fields in double quotation marks
+- Empty fields (`,,`) are no longer necessary/meaningful and thus not allowed
+
 ### Null values
 
 TDIF defines `\N` for null values. This decision was made because other mechanisms, such as an empty unquoted field
