@@ -3,6 +3,9 @@
 Tabular Data Interchange Format (TDIF) is a lightweight, text-based, language-independent data interchange format for
 the exchange of tabular data.
 
+> [!WARNING]
+> This document is currently in draft form. Do not implement it yet.
+
 ## Rationale
 
 With formats like XML, JSON, YAML, CBOR and many others, there seems to be no shortage for standardized, hierarchical
