@@ -269,6 +269,23 @@ For the sake of simplicity and clarity, TDIF requires that all fields are enclos
 the format unambiguous and easy to read and write. As a consequence, any whitespace character outside quotation marks
 is not allowed.
 
+### Escape quotation marks
+
+> [!CAUTION]
+> This section needs further discussion.
+
+Current considerations why escaping of the quotation mark using a reverse solidus (`\`) instead of doubling it:
+
+- The reverse solidus is already used for null values (`\N`).
+- The reverse solidus is used for escaping in many other formats (e.g., JSON, YAML, XML, ...) whereas doubling does not
+  seem to be used in any other format.
+- Many CSV implementations already allow the reverse solidus as an alternative for escaping.
+- It's easier to parse as the parser does not need to keep track of the previous character. A reverse solidus always
+  escapes the next character where a quotation mark could be the end of the field or the escape character for the next
+  quotation mark.
+- Doubling the quotation mark is not intuitive and not easy to read. It does not seem to provide any advantage over
+  escaping using a reverse solidus – except for being the current standard.
+
 ## Request for Comments
 
 This document is currently in draft form. Comments and suggestions are welcome. Please start
