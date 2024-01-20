@@ -64,7 +64,7 @@ public class TdifWriter implements Closeable {
             writeField(fields[i]);
         }
 
-        writer.write('\n');
+        writer.write(System.lineSeparator());
     }
 
     private void writeField(final Object val) throws IOException {
@@ -108,7 +108,7 @@ public class TdifWriter implements Closeable {
         if (comment.indexOf('\r') != -1 || comment.indexOf('\n') != -1) {
             throw new IllegalArgumentException("comment must not contain line breaks");
         }
-        writer.append('#').append(comment).append('\n');
+        writer.append('#').append(comment).append(System.lineSeparator());
         return this;
     }
 
