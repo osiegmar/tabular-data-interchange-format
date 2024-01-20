@@ -262,7 +262,8 @@ Which of the whitespaces are desired and which are not? This is not clear. The f
 ```
 
 For the sake of simplicity and clarity, TDIF requires that all fields are enclosed in double quotation marks. This makes
-the format unambiguous and easy to read and write.
+the format unambiguous and easy to read and write. As a consequence, any whitespace character outside quotation marks
+is not allowed.
 
 ## Request for Comments
 

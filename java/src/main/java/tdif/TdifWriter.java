@@ -17,7 +17,7 @@ public class TdifWriter implements Closeable {
     }
 
     public TdifWriter(final Path file) throws IOException {
-        this(Files.newBufferedWriter(Objects.requireNonNull(file, "file must not be null")));
+        writer = Files.newBufferedWriter(Objects.requireNonNull(file, "file must not be null"));
     }
 
     public TdifWriter writeHeader(final String... fields) throws IOException {
