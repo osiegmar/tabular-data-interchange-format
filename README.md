@@ -289,6 +289,23 @@ Current considerations why escaping of the quotation mark using a reverse solidu
   feed, ...). If newline characters were escaped, a record would always be on one line. This might increase readability
   for humans and could help with parsing (readline -> complete comment or record) and debugging.
 
+Especially the last point (escaping CR and LF) is interesting. Given the following example:
+
+```csv
+"header"CRLF
+"a multilineLF
+value"CRLF
+```
+
+The LF in the second line is part of the value. The value may come from a database export for example, and it might
+be important to preserve exactly as it is. It's easy to misinterpret a character on this position as a record separator.
+A lot more unambiguity could be achieved by escaping CR and LF.
+
+```csv
+"header"CRLF
+"a multiline\nvalue"CRLF
+```
+
 ## Request for Comments
 
 This document is currently in draft form. Comments and suggestions are welcome. Please start
