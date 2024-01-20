@@ -285,6 +285,9 @@ Current considerations why escaping of the quotation mark using a reverse solidu
   quotation mark.
 - Doubling the quotation mark is not intuitive and not easy to read. It does not seem to provide any advantage over
   escaping using a reverse solidus – except for being the current standard.
+- The reverse solidus could be used for even more escaping (e.g., `\t` for tab, `\r` for carriage return, `\n` for line
+  feed, ...). If newline characters were escaped, a record would always be on one line. This might increase readability
+  for humans and could help with parsing (readline -> complete comment or record) and debugging.
 
 ## Request for Comments
 
