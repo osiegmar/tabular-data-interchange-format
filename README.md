@@ -8,13 +8,13 @@ the exchange of tabular data.
 
 ## Rationale
 
-With formats like XML, JSON, YAML, CBOR and many others, there seems to be no shortage for standardized, hierarchical
+With formats like XML, JSON, YAML, CBOR and many others, there seems to be no shortage of standardized, hierarchical
 data interchange and serialization formats.
 
 For simple tabular data, however, there is no truly standardized format. There's CSV, for
 which [RFC 4180](https://datatracker.ietf.org/doc/html/rfc4180) describes an informative, non-normative and thus
 nonbinding specification. Because CSV has been used decades before RFC 4180 was published, many different
-interpretations and implementations exists. Even implementations that strictly follow RFC 4180 often behave differently
+interpretations and implementations exist. Even implementations that strictly follow RFC 4180 often behave differently
 in some aspects. This is because the specification offers many options and leaves room for interpretation.
 Those differences can lead to unexpected, yet incorrect results. This is a continuous source of frustration for
 developers and financial damage for organizations.
@@ -42,7 +42,7 @@ Typical differences between CSV implementations:
 
 Many of these differences are incorporated in the DRAFT
 of [RFC-4180-bis](https://datatracker.ietf.org/doc/html/draft-shafranovich-rfc4180-bis). But the main problem remains:
-The RFC will stay non-normative and thus nonbinding and when people talk about CSV, they will still have different
+The RFC will stay non-normative and thus nonbinding, and when people talk about CSV, they will still have different
 things in mind.
 
 TDIF, while similar to CSV, is a strict and unambiguous format. Due to its similarity to CSV, it is not only easy to
@@ -83,7 +83,7 @@ MUST be unique (case-insensitive). Any field name MUST be enclosed in double-quo
 
 Example:
 
-```csv
+```
 "first name","last name","age"
 "John","Doe","42"
 "Jane","Doe",\N
@@ -92,10 +92,10 @@ Example:
 ### Comments
 
 A line starting with a hash character (`#`) is considered a comment. The hash character MUST be the first character of
-the line. Until the end of line, any character is allowed. The end-of-line character(s) MUST NOT be part of the comment.
+the line. Until the end-of-line, any character is allowed. The end-of-line character(s) MUST NOT be part of the comment.
 Comments MAY be inserted anywhere in the file, except within a record.
 
-```csv
+```
 # This is a comment
 "header1","header2","header3"
 # This is another comment
@@ -176,7 +176,7 @@ While TDIF aims to be as close to CSV as possible, there are some intentional di
 to circumvent the ambiguities of CSV and address some very often used features that sometimes lead to interchange
 problems and unexpected results (see [Rationale section](#Rationale)).
 
-- Specify these features (mentioned, but not specified in RFC 4180-bis)
+- Specify these features (mentioned but not specified in RFC 4180-bis)
     - Explicit null values
     - Comments
 - Make the format unambiguous
@@ -197,16 +197,16 @@ These differences come with a few consequences:
 TDIF defines `\N` for null values. This decision was made because other mechanisms, such as an empty unquoted field
 (`,,`), are ambiguous. This is especially true for files that contain only one field per record.
 
-In the following example it's not clear if the file contains a null value in the third line.
+In the following example, it's not clear if the file contains a null value in the third line.
 
-```csv
+```
 header1CRLF
 value1CRLF
 ```
 
 In TDIF this is unambiguous, no matter if the last line is terminated by a line-feed character or not.
 
-```csv
+```
 "header1"CRLF
 "value1"CRLF
 \N
@@ -224,23 +224,23 @@ comments are mentioned as a possible extension.
 ### Always enclose fields in double quotation marks
 
 In CSV, fields need to be enclosed in double quotation marks only if they contain control characters such as a field
-separator, a line break or a quotation mark. In TDIF, this list has to be extended by the hash character (`#`) in order
-to support comments.
+separator, a line break or a quotation mark.
+In TDIF, this list has to be extended by the hash character (`#`) to support comments.
 
 Still, there are situations where ambiguity arises. For example:
 
 **Example 1**: Empty field in the last record of a file that contains only one field per record:
 
-In the following example it's not clear if the file contains an empty value in the third line.
+In the following example, it's not clear if the file contains an empty value in the third line.
 
-```csv
+```
 header1CRLF
 value1CRLF
 ```
 
 In TDIF this is unambiguous, no matter if the last line is terminated by a line-feed character or not.
 
-```csv
+```
 "header1"CRLF
 "value1"CRLF
 ""
@@ -251,16 +251,16 @@ record. But which application uses the new and which the old rule?
 
 **Example 2**: Desired whitespaces:
 
-```csv
+```
 header1,_header2CRLF
 _foo,bar_
 ```
 
-Underscores are used to represent whitespaces in order to prevent the Markdown editor/renderer from removing them.
+Underscores are used to represent whitespaces to prevent the Markdown editor/renderer from removing them.
 
 Which of the whitespaces are desired and which are not? This is not clear. The following example is unambiguous.
 
-```csv
+```
 "header1"," header2"CRLF
 " foo","bar "
 ```
@@ -269,18 +269,18 @@ For the sake of simplicity and clarity, TDIF requires that all fields are enclos
 the format unambiguous and easy to read and write. As a consequence, any whitespace character outside quotation marks
 is not allowed.
 
-### Escape quotation marks
+### Escape Quotation Marks
 
 > [!CAUTION]
 > This section needs further discussion.
 
-Current considerations why escaping of the quotation mark using a reverse solidus (`\`) instead of doubling it:
+Current considerations for escaping the quotation mark using a reverse solidus (`\`) instead of doubling it:
 
 - The reverse solidus is already used for null values (`\N`).
-- The reverse solidus is used for escaping in many other formats (e.g., JSON, YAML, XML, ...) whereas doubling does not
-  seem to be used in any other format.
+- The reverse solidus is used for escaping in many other formats (e.g., JSON, YAML, XML, ...) whereas doubling it does
+  not seem to be used in any other format.
 - Many CSV implementations already allow the reverse solidus as an alternative for escaping.
-- It's easier to parse as the parser does not need to keep track of the previous character. A reverse solidus always
+- It's easier to parse, as the parser does not need to keep track of the previous character. A reverse solidus always
   escapes the next character where a quotation mark could be the end of the field or the escape character for the next
   quotation mark.
 - Doubling the quotation mark is not intuitive and not easy to read. It does not seem to provide any advantage over
@@ -291,17 +291,17 @@ Current considerations why escaping of the quotation mark using a reverse solidu
 
 Especially the last point (escaping CR and LF) is interesting. Given the following example:
 
-```csv
+```
 "header"CRLF
 "a multilineLF
 value"CRLF
 ```
 
-The LF in the second line is part of the value. The value may come from a database export for example, and it might
-be important to preserve exactly as it is. It's easy to misinterpret a character on this position as a record separator.
-A lot more unambiguity could be achieved by escaping CR and LF.
+The LF in the second line is part of the value. The value may come from a database export, for example, and it might be
+important to preserve exactly as it is. It's easy to misinterpret a character in this position as a record separator.
+This ambiguity could be avoided by escaping CR and LF when they are part of a value.
 
-```csv
+```
 "header"CRLF
 "a multiline\nvalue"CRLF
 ```
