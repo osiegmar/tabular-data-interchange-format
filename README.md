@@ -191,6 +191,13 @@ In TDIF this is unambiguous, no matter if the last line is terminated by a line-
 
 This approach is similar to that of the PostgreSQL database, which uses \N to represent null values in CSV files.
 
+### Comments
+
+Comments are not mentioned in RFC 4180. However, they are a common feature in CSV implementations. They are used to
+provide additional information about the file like the author, the creation date, the source, usage instructions, etc.
+The TDIF format specifies comments to make it easier to embed additional information in the file. In RFC 4180-bis,
+comments are mentioned as a possible extension.
+
 ## Request for Comments
 
 This document is currently in draft form. Comments and suggestions are welcome. Please start
