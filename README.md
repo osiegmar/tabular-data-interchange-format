@@ -314,3 +314,9 @@ a [discussion](https://github.com/osiegmar/tabular-data-interchange-format/discu
 ## Implementation
 
 See [implementations](implementations.md).
+
+## License
+
+This document is licensed under the [CC0 1.0 Universal (CC0 1.0) Public Domain Dedication](LICENSE) license.
+
+The reference implementations in this repository are licensed under the [MIT](reference-impl/LICENSE) license.
