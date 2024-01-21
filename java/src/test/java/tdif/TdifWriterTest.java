@@ -20,7 +20,7 @@ class TdifWriterTest {
     @Test
     void writeHeader() throws IOException {
         w.writeHeader("foo", "bar");
-        assertThat(sw).hasToString("\"foo\",\"bar\"\n");
+        assertThat(sw).hasToString("\"foo\",\"bar\"%n".formatted());
     }
 
     @Test
@@ -63,7 +63,7 @@ class TdifWriterTest {
         w.writeHeader("h1", "h2", "h3", "h4")
             .writeRecord("foo", "", 42, null);
 
-        assertThat(sw).hasToString("\"h1\",\"h2\",\"h3\",\"h4\"\n\"foo\",\"\",42,\\N\n");
+        assertThat(sw).hasToString("\"h1\",\"h2\",\"h3\",\"h4\"%n\"foo\",\"\",42,\\N%n".formatted());
     }
 
     @Test
@@ -71,7 +71,7 @@ class TdifWriterTest {
         w.writeHeader("h1", "h2")
             .writeRecord("foo", "foo \"is\" bar");
 
-        assertThat(sw).hasToString("\"h1\",\"h2\"\n\"foo\",\"foo \\\"is\\\" bar\"\n");
+        assertThat(sw).hasToString("\"h1\",\"h2\"%n\"foo\",\"foo \\\"is\\\" bar\"%n".formatted());
     }
 
     @Test
@@ -91,7 +91,7 @@ class TdifWriterTest {
     @Test
     void writeComment() throws IOException {
         w.writeComment("foo");
-        assertThat(sw).hasToString("#foo\n");
+        assertThat(sw).hasToString("#foo%n".formatted());
     }
 
     @Test

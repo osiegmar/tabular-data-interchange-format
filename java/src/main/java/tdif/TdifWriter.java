@@ -9,6 +9,15 @@ import java.util.Objects;
 
 public class TdifWriter implements Closeable {
 
+    private static final char CR = '\r';
+    private static final char LF = '\n';
+    private static final char FIELD_ENCLOSURE = '"';
+    private static final char FIELD_SEPARATOR = ',';
+    private static final char ESCAPE = '\\';
+    private static final char COMMENT_START = '#';
+    private static final String NULL = "\\N";
+    private static final String OS_LS = System.lineSeparator();
+
     private final Writer writer;
     private int fieldsPerRecord;
 
@@ -21,18 +30,21 @@ public class TdifWriter implements Closeable {
     }
 
     public TdifWriter writeHeader(final String... fields) throws IOException {
+        Objects.requireNonNull(fields, "Header must not be null");
+        if (fields.length == 0) {
+            throw new IllegalArgumentException("Header must not be empty");
+        }
         if (fieldsPerRecord > 0) {
             throw new IllegalStateException("Header already written");
         }
-        validateHeader(fields);
+        validateHeaderFields(fields);
 
-        writeInternal(fields);
+        writeFields(fields);
         fieldsPerRecord = fields.length;
         return this;
     }
 
-    private static void validateHeader(final String[] header) {
-        requiresNonNullOrEmpty("Header", header);
+    private static void validateHeaderFields(final String[] header) {
         for (int i = 0; i < header.length; i++) {
             if (header[i] == null) {
                 throw new NullPointerException("Header must not contain null");
@@ -48,67 +60,60 @@ public class TdifWriter implements Closeable {
         }
     }
 
-    private static void requiresNonNullOrEmpty(final String name, final Object[] fields) {
-        Objects.requireNonNull(fields, name + " must not be null");
-        if (fields.length == 0) {
-            throw new IllegalArgumentException(name + " must not be empty");
-        }
-    }
-
-    private void writeInternal(final Object[] fields) throws IOException {
+    private void writeFields(final Object[] fields) throws IOException {
         for (int i = 0; i < fields.length; i++) {
             if (i > 0) {
-                writer.write(',');
+                writer.write(FIELD_SEPARATOR);
             }
 
             writeField(fields[i]);
         }
 
-        writer.write(System.lineSeparator());
+        writer.write(OS_LS);
     }
 
     private void writeField(final Object val) throws IOException {
         if (val == null) {
-            writer.write("\\N");
+            writer.write(NULL);
         } else if (val instanceof Number || val instanceof Boolean) {
             writer.write(val.toString());
         } else {
             final String str = val.toString();
-            writer.write('"');
+            writer.write(FIELD_ENCLOSURE);
 
             for (int i = 0; i < str.length(); i++) {
                 final char ch = str.charAt(i);
-                if (ch == '\\' | ch == '"') {
-                    writer.write('\\');
+                if (ch == ESCAPE | ch == FIELD_ENCLOSURE) {
+                    writer.write(ESCAPE);
                 }
                 writer.write(ch);
             }
 
-            writer.write('"');
+            writer.write(FIELD_ENCLOSURE);
         }
     }
 
     public TdifWriter writeRecord(final Object... fields) throws IOException {
-        requiresNonNullOrEmpty("Fields", fields);
+        Objects.requireNonNull(fields, "fields must not be null");
 
         if (fieldsPerRecord == 0) {
             throw new IllegalStateException("Header not written");
         }
 
         if (fields.length != fieldsPerRecord) {
-            throw new IllegalArgumentException("Expected " + fieldsPerRecord + " fields, got " + fields.length);
+            throw new IllegalArgumentException("Expected %d fields, got %d".formatted(fieldsPerRecord, fields.length));
         }
 
-        writeInternal(fields);
+        writeFields(fields);
         return this;
     }
 
     public TdifWriter writeComment(final String comment) throws IOException {
         Objects.requireNonNull(comment, "comment must not be null");
-        if (comment.indexOf('\r') != -1 || comment.indexOf('\n') != -1) {
+        if (comment.indexOf(CR) != -1 || comment.indexOf(LF) != -1) {
             throw new IllegalArgumentException("comment must not contain line breaks");
         }
-        writer.append('#').append(comment).append(System.lineSeparator());
+        writer.append(COMMENT_START).append(comment).append(OS_LS);
         return this;
     }
 
