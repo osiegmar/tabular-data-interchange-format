@@ -63,7 +63,7 @@ class TdifWriterTest {
         w.writeHeader("h1", "h2", "h3", "h4")
             .writeRecord("foo", "", 42, null);
 
-        assertThat(sw).hasToString("\"h1\",\"h2\",\"h3\",\"h4\"%n\"foo\",\"\",42,\\N%n".formatted());
+        assertThat(sw).hasToString("\"h1\",\"h2\",\"h3\",\"h4\"%n\"foo\",\"\",\"42\",\\N%n".formatted());
     }
 
     @Test

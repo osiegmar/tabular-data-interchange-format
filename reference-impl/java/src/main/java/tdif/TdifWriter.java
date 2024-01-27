@@ -75,21 +75,27 @@ public class TdifWriter implements Closeable {
     private void writeField(final Object val) throws IOException {
         if (val == null) {
             writer.write(NULL);
-        } else if (val instanceof Number || val instanceof Boolean) {
+            return;
+        }
+
+        writer.write(FIELD_ENCLOSURE);
+
+        if (val instanceof Number || val instanceof Boolean) {
             writer.write(val.toString());
         } else {
-            final String str = val.toString();
-            writer.write(FIELD_ENCLOSURE);
+            writeEscapedString(val.toString());
+        }
 
-            for (int i = 0; i < str.length(); i++) {
-                final char ch = str.charAt(i);
-                if (ch == ESCAPE | ch == FIELD_ENCLOSURE) {
-                    writer.write(ESCAPE);
-                }
-                writer.write(ch);
+        writer.write(FIELD_ENCLOSURE);
+    }
+
+    private void writeEscapedString(final String str) throws IOException {
+        for (int i = 0; i < str.length(); i++) {
+            final char ch = str.charAt(i);
+            if (ch == ESCAPE | ch == FIELD_ENCLOSURE) {
+                writer.write(ESCAPE);
             }
-
-            writer.write(FIELD_ENCLOSURE);
+            writer.write(ch);
         }
     }
 
