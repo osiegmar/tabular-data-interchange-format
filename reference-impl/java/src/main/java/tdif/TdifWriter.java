@@ -14,6 +14,7 @@ public class TdifWriter implements Closeable {
     private static final char FIELD_ENCLOSURE = '"';
     private static final char FIELD_SEPARATOR = ',';
     private static final char COMMENT_START = '#';
+    private static final String ESCAPED_ENCLOSURE = "\"\"";
     private static final String NULL = "\\N";
     private static final String OS_LS = System.lineSeparator();
 
@@ -78,23 +79,21 @@ public class TdifWriter implements Closeable {
         }
 
         writer.write(FIELD_ENCLOSURE);
-
-        if (val instanceof Number || val instanceof Boolean) {
-            writer.write(val.toString());
-        } else {
-            writeEscapedString(val.toString());
-        }
-
+        writeEscapedString(val.toString());
         writer.write(FIELD_ENCLOSURE);
     }
 
     private void writeEscapedString(final String str) throws IOException {
-        for (int i = 0; i < str.length(); i++) {
-            final char ch = str.charAt(i);
-            if (ch == FIELD_ENCLOSURE) {
-                writer.write(FIELD_ENCLOSURE);
-            }
-            writer.write(ch);
+        int pos = 0;
+
+        for (int idx; (idx = str.indexOf(FIELD_ENCLOSURE, pos)) != -1;) {
+            writer.write(str, pos, idx - pos);
+            writer.write(ESCAPED_ENCLOSURE);
+            pos = idx + 1;
+        }
+
+        if (pos < str.length()) {
+            writer.write(str, pos, str.length() - pos);
         }
     }
 
@@ -118,7 +117,9 @@ public class TdifWriter implements Closeable {
         if (comment.indexOf(CR) != -1 || comment.indexOf(LF) != -1) {
             throw new IllegalArgumentException("comment must not contain line breaks");
         }
-        writer.append(COMMENT_START).append(comment).append(OS_LS);
+        writer.write(COMMENT_START);
+        writer.write(comment);
+        writer.write(OS_LS);
         return this;
     }
 
