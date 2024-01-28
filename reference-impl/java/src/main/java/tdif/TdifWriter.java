@@ -13,7 +13,6 @@ public class TdifWriter implements Closeable {
     private static final char LF = '\n';
     private static final char FIELD_ENCLOSURE = '"';
     private static final char FIELD_SEPARATOR = ',';
-    private static final char ESCAPE = '\\';
     private static final char COMMENT_START = '#';
     private static final String NULL = "\\N";
     private static final String OS_LS = System.lineSeparator();
@@ -92,8 +91,8 @@ public class TdifWriter implements Closeable {
     private void writeEscapedString(final String str) throws IOException {
         for (int i = 0; i < str.length(); i++) {
             final char ch = str.charAt(i);
-            if (ch == ESCAPE | ch == FIELD_ENCLOSURE) {
-                writer.write(ESCAPE);
+            if (ch == FIELD_ENCLOSURE) {
+                writer.write(FIELD_ENCLOSURE);
             }
             writer.write(ch);
         }

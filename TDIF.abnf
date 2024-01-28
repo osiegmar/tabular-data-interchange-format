@@ -10,10 +10,10 @@ record          = field *(comma field) linebreak
 
 field           = null / value
 
-value           = DQUOTE *(textdata / escaped-quote / escaped-escaped) DQUOTE
+value           = DQUOTE *(textdata / 2DQUOTE) DQUOTE
 
-textdata        = %x00-5B / %x5D-7F / UTF8-data
-                    ; all characters except reverse solidus
+textdata        = %x00-21 / %x23-7F / UTF8-data
+                    ; all characters except quotation mark
 
 ;;; comment
 
@@ -26,10 +26,6 @@ commentdata     = %x00-09 / %x0B-0C / %x0E-7F / UTF8-data
 
 null            = %x5C.4E       ; \N
 
-escaped-quote   = %x5C.22       ; \"
-
-escaped-escaped = %x5C.5C       ; \\
-
 comma           = %x2C          ; ,
 
 hash            = %x23          ; #
@@ -38,6 +34,9 @@ linebreak       = CR / LF / CRLF
 
 ;;; Basic rules
 
+LF              = %x0A
+                    ; as per section B.1 of [RFC5234]
+
 CR              = %x0D
                     ; as per section B.1 of [RFC5234]
 
@@ -45,9 +44,6 @@ CRLF            = CR LF
                     ; as per section B.1 of [RFC5234]
 
 DQUOTE          = %x22
-                    ; as per section B.1 of [RFC5234]
-
-LF              = %x0A
                     ; as per section B.1 of [RFC5234]
 
 UTF8-data       = UTF8-2 / UTF8-3 / UTF8-4
